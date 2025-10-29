@@ -2915,7 +2915,7 @@ MonoBehaviour:
   m_modelMetaTouchProRightController: {fileID: 172160872}
   m_modelMetaTouchPlusLeftController: {fileID: 1435899031}
   m_modelMetaTouchPlusRightController: {fileID: 59109936}
-  m_controller: 0
+  m_controller: 1
   m_showState: 1
   showWhenHandsArePoweredByNaturalControllerPoses: 0
   RayHelper: {fileID: 0}
@@ -6521,6 +6521,11 @@ MonoBehaviour:
   left: {fileID: 2105035483}
   right: {fileID: 692111966}
   wormholePrefab: {fileID: 7630168696014616410, guid: bc9ba1cb1ede0a14dbecea4733fe24cc, type: 3}
+  appearThreshold: 0.2
+  disappearThreshold: 0.25
+  faceAlongHands: 1
+  autoScaleByDistance: 1
+  scaleRange: {x: 0.05, y: 0.2}
 --- !u!4 &1183932051
 Transform:
   m_ObjectHideFlags: 0
