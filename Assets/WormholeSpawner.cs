@@ -8,8 +8,8 @@ public class WormholeSpawner : MonoBehaviour
     public GameObject wormholePrefab;
 
     [Header("Distance Thresholds (meters)")]
-    public float appearThreshold = 0.20f;     // 距離 <= 這個值 → 出現
-    public float disappearThreshold = 0.25f;  // 距離 >= 這個值 → 消失（設得比 appear 大一點避免抖動）
+    public float appearThreshold = 0.30f;     // 距離 <= 這個值 → 出現
+    public float disappearThreshold = 0.35f;  // 距離 >= 這個值 → 消失（設得比 appear 大一點避免抖動）
 
     [Header("Optional")]
     public bool faceAlongHands = true;        // 是否讓球的朝向沿著兩手方向
