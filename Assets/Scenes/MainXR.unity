@@ -9086,8 +9086,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb689899d5f542e683dd5df1f9d5c2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftHandRing: {fileID: 1726806297}
-  rightHandRing: {fileID: 838528038}
+  leftHandRing: {fileID: 460984291842334306}
+  rightHandRing: {fileID: 76279471}
   ringPrefab: {fileID: 7630168696014616410, guid: bc9ba1cb1ede0a14dbecea4733fe24cc, type: 3}
 --- !u!4 &1719242392
 Transform:
