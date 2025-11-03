@@ -34,8 +34,9 @@ public class RingFormer : MonoBehaviour
             {
                 // Spawn ring based on color
                 ring.SetActive(true);
-                ring.transform.position = (leftHandRing.position + rightHandRing.position) * 0.5f;
-                Color c = GameColorExtensions.ToColor(GameColorExtensions.Add(leftHandRing.GetComponent<QuarterRing>().color, rightHandRing.GetComponent<QuarterRing>().color));
+                // ring.transform.position = (leftHandRing.position + rightHandRing.position) * 0.5f;
+                GameColor c = GameColorExtensions.Add(leftHandRing.GetComponent<QuarterRing>().color, rightHandRing.GetComponent<QuarterRing>().color);
+                fr.SetColor(c);
 
                 ringFormed = true;
             }
