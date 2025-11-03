@@ -23,22 +23,24 @@ public class ColorSwitch : MonoBehaviour
         bool triggerDown = OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch);
         if (triggerDown)
         {
+            Debug.Log("Right down");
             if (quarterRingR.color == GameColor.Red)
                 quarterRingR.SetColor(GameColor.Green);
-            if (quarterRingR.color == GameColor.Green)
+            else if (quarterRingR.color == GameColor.Green)
                 quarterRingR.SetColor(GameColor.Blue);
-            if (quarterRingR.color == GameColor.Blue)
+            else if (quarterRingR.color == GameColor.Blue)
                 quarterRingR.SetColor(GameColor.Red);
         }
 
         bool triggerDown2 = OVRInput.GetDown(OVRInput.Button.Three, OVRInput.Controller.LTouch);
         if (triggerDown2)
         {
+            Debug.Log("Left down");
             if (quarterRingL.color == GameColor.Red)
                 quarterRingL.SetColor(GameColor.Green);
-            if (quarterRingL.color == GameColor.Green)
+            else if (quarterRingL.color == GameColor.Green)
                 quarterRingL.SetColor(GameColor.Blue);
-            if (quarterRingL.color == GameColor.Blue)
+            else if (quarterRingL.color == GameColor.Blue)
                 quarterRingL.SetColor(GameColor.Red);
         }
     }

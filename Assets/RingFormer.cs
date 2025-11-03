@@ -40,14 +40,16 @@ public class RingFormer : MonoBehaviour
                 // Spawn ring based on color
                 ring.SetActive(true);
                 // ring.transform.position = (leftHandRing.position + rightHandRing.position) * 0.5f;
-                GameColor c = GameColorExtensions.Add(leftHandRing.GetComponent<QuarterRing>().color, rightHandRing.GetComponent<QuarterRing>().color);
-                fr.SetColor(c);
+                
 
                 ringFormed = true;
             }
         } else
         {
             ring.transform.position = (leftHandRing.position - leftHandRing.up * ringRadius + rightHandRing.position + rightHandRing.up * ringRadius) * 0.5f;
+
+            GameColor c = GameColorExtensions.Add(leftHandRing.GetComponent<QuarterRing>().color, rightHandRing.GetComponent<QuarterRing>().color);
+            fr.SetColor(c);
             // ring.transform.position = leftHandRing.position + leftHandRing.up * ringRadius;
 
             if (
