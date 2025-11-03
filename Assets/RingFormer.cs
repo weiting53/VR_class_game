@@ -32,7 +32,7 @@ public class RingFormer : MonoBehaviour
         if (!ringFormed)
         {
             if (
-                Mathf.Abs(dist - ringRadius * 1.41421f) < 0.03f &&
+                Mathf.Abs(dist - ringRadius * 1.41421f) < 0.02f &&
                 Mathf.Abs(dotProdUp) < 0.1f &&
                 Mathf.Abs(dotProdForward) > 0.9f
             )
@@ -51,7 +51,7 @@ public class RingFormer : MonoBehaviour
             // ring.transform.position = leftHandRing.position + leftHandRing.up * ringRadius;
 
             if (
-                Mathf.Abs(dist - ringRadius * 1.41421f) > 0.05f ||
+                Mathf.Abs(dist - ringRadius * 1.41421f) > 0.04f ||
                 Mathf.Abs(dotProdUp) > 0.12f ||
                 Mathf.Abs(dotProdForward) < 0.88f
             )
