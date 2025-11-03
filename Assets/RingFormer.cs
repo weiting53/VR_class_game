@@ -11,19 +11,21 @@ public class RingFormer : MonoBehaviour
     private float ringRadius = 0.2f;
     private bool ringFormed = false;
     private GameObject ring;
+    private FullRing fr;
 
     // Start is called before the first frame update
     void Start()
     {
         ring = Instantiate(ringPrefab);
         ring.SetActive(false);
-        // qr = ring.GetComponent<QuarterRing>();
+        
+        fr = ring.GetComponent<FullRing>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float dotProd = Vector3.Dot(leftHandRing.forward, rightHandRing.forward);
+        float dotProd = Vector3.Dot(leftHandRing.up, rightHandRing.up);
         float dist = Vector3.Distance(leftHandRing.position, rightHandRing.position);
 
         if (!ringFormed)
@@ -33,12 +35,13 @@ public class RingFormer : MonoBehaviour
                 // Spawn ring based on color
                 ring.SetActive(true);
                 ring.transform.position = (leftHandRing.position + rightHandRing.position) * 0.5f;
+                Color c = GameColorExtensions.ToColor(GameColorExtensions.Add(leftHandRing.GetComponent<QuarterRing>().color, rightHandRing.GetComponent<QuarterRing>().color));
 
                 ringFormed = true;
             }
         } else
         {
-            ring.transform.position = (leftHandRing.position + rightHandRing.position) * 0.5f;
+            ring.transform.position = (leftHandRing.position + leftHandRing.up * ringRadius + rightHandRing.position + rightHandRing.up * ringRadius) * 0.5f;
 
             if (Mathf.Abs(dotProd) > 0.12f || Mathf.Abs(dist - ringRadius * 1.41421f) > 0.07f)
             {
