@@ -30,7 +30,7 @@ public class RingFormer : MonoBehaviour
 
         if (!ringFormed)
         {
-            if (Mathf.Abs(dotProd) < 0.1f && Mathf.Abs(dist - ringRadius * 1.41421f) < 0.05f)
+            if (Mathf.Abs(dotProd) < 0.15f && Mathf.Abs(dist - ringRadius * 1.41421f) < 0.1f)
             {
                 // Spawn ring based on color
                 ring.SetActive(true);
@@ -42,9 +42,10 @@ public class RingFormer : MonoBehaviour
             }
         } else
         {
-            ring.transform.position = (leftHandRing.position + leftHandRing.up * ringRadius + rightHandRing.position + rightHandRing.up * ringRadius) * 0.5f;
+            // ring.transform.position = (leftHandRing.position + leftHandRing.up * ringRadius + rightHandRing.position + rightHandRing.up * ringRadius) * 0.5f;
+            ring.transform.position = leftHandRing.position + leftHandRing.up * ringRadius;
 
-            if (Mathf.Abs(dotProd) > 0.12f || Mathf.Abs(dist - ringRadius * 1.41421f) > 0.07f)
+            if (Mathf.Abs(dotProd) > 0.17f || Mathf.Abs(dist - ringRadius * 1.41421f) > 0.12f)
             {
                 ring.SetActive(false);
 
