@@ -1558,6 +1558,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1911218788}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &312577285
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 312577287}
+  - component: {fileID: 312577286}
+  m_Layer: 0
+  m_Name: FairyZone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &312577286
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312577285}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 6, y: 2.5, z: 6}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &312577287
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312577285}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12.089675, y: -8.31, z: -12.089677}
+  m_LocalScale: {x: 1.8652, y: 1.5019, z: 2.0674}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330972515
 GameObject:
   m_ObjectHideFlags: 0
@@ -4649,63 +4702,6 @@ Transform:
   - {fileID: 1106995774}
   m_Father: {fileID: 692111966}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &844018152
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4664274749278718338, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_Name
-      value: spirit_blue
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472161072081621816, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.76
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472161072081621816, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.48
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472161072081621816, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -4.55
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472161072081621816, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472161072081621816, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472161072081621816, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472161072081621816, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472161072081621816, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472161072081621816, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472161072081621816, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
 --- !u!1 &850530322
 GameObject:
   m_ObjectHideFlags: 0
@@ -5391,6 +5387,57 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 696987465}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &948771162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 948771164}
+  - component: {fileID: 948771163}
+  m_Layer: 0
+  m_Name: FairySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &948771163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948771162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0578e4a4b57cea40b16bfd70766d754, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zone: {fileID: 312577286}
+  spiritBlue: {fileID: 4664274749278718338, guid: 65a446641b18ee44981afb64ed0f555e, type: 3}
+  spiritGreen: {fileID: 6504490439734651986, guid: a5df47d70c07d6d4d85c7d6aedd30d3a, type: 3}
+  spiritRed: {fileID: 6857724988000628740, guid: 79e6051e87e8f204a8f9740680fc9297, type: 3}
+  spiritYellow: {fileID: 4125094759658339341, guid: 34cd743b5e929a6428e7d54d97e4ad66, type: 3}
+  minSpeed: 0.845
+  maxSpeed: 1.3
+--- !u!4 &948771164
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948771162}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12.089675, y: -8.462768, z: -12.089677}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &951077042
 GameObject:
@@ -10895,4 +10942,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 2035059860}
   - {fileID: 196001497}
-  - {fileID: 844018152}
+  - {fileID: 312577287}
+  - {fileID: 948771164}
