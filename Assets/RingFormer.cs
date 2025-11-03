@@ -25,12 +25,17 @@ public class RingFormer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float dotProd = Vector3.Dot(leftHandRing.up, rightHandRing.up);
+        float dotProdUp = Vector3.Dot(leftHandRing.up, rightHandRing.up);
+        float dotProdForward = Vector3.Dot(leftHandRing.forward, rightHandRing.forward);
         float dist = Vector3.Distance(leftHandRing.position, rightHandRing.position);
 
         if (!ringFormed)
         {
-            if (Mathf.Abs(dotProd) < 0.15f && Mathf.Abs(dist - ringRadius * 1.41421f) < 0.1f)
+            if (
+                Mathf.Abs(dist - ringRadius * 1.41421f) < 0.03f &&
+                Mathf.Abs(dotProdUp) < 0.1f &&
+                Mathf.Abs(dotProdForward) > 0.9f
+            )
             {
                 // Spawn ring based on color
                 ring.SetActive(true);
@@ -42,10 +47,14 @@ public class RingFormer : MonoBehaviour
             }
         } else
         {
-            // ring.transform.position = (leftHandRing.position + leftHandRing.up * ringRadius + rightHandRing.position + rightHandRing.up * ringRadius) * 0.5f;
-            ring.transform.position = leftHandRing.position + leftHandRing.up * ringRadius;
+            ring.transform.position = (leftHandRing.position - leftHandRing.up * ringRadius + rightHandRing.position + rightHandRing.up * ringRadius) * 0.5f;
+            // ring.transform.position = leftHandRing.position + leftHandRing.up * ringRadius;
 
-            if (Mathf.Abs(dotProd) > 0.17f || Mathf.Abs(dist - ringRadius * 1.41421f) > 0.12f)
+            if (
+                Mathf.Abs(dist - ringRadius * 1.41421f) > 0.05f &&
+                Mathf.Abs(dotProdUp) > 0.12f &&
+                Mathf.Abs(dotProdForward) < 0.88f
+            )
             {
                 ring.SetActive(false);
 
