@@ -94,6 +94,8 @@ public class QuarterRing : MonoBehaviour
         else if (color == GameColor.Green)
             SetColor(GameColor.Blue);
         else if (color == GameColor.Blue)
+            SetColor(GameColor.Pure);
+        else if (color == GameColor.Pure)
             SetColor(GameColor.Red);
     }
 }
