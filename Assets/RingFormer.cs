@@ -8,7 +8,7 @@ public class RingFormer : MonoBehaviour
     public Transform rightHandRing;
     public GameObject ringPrefab;
 
-    private float ringRadius = 0.2f;
+    private float ringRadius = 0.13f;
     private bool ringFormed = false;
     private GameObject ring;
     private FullRing fr;
