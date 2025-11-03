@@ -42,7 +42,7 @@ public class FairySpawner : MonoBehaviour
         var fw = go.GetComponent<FairyWanderer>();
         if (fw == null) fw = go.AddComponent<FairyWanderer>();
         fw.zone = zone;
-        fw.baseMoveSpeed = Random.Range(minSpeed, maxSpeed);
+        fw.speed = Random.Range(minSpeed, maxSpeed);
         
     }
 }
