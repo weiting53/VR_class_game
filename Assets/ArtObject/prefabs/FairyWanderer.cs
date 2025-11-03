@@ -1,222 +1,139 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Collider))]
 public class FairyWanderer : MonoBehaviour
 {
-    [Header("Zone & Motion")]
-    public BoxCollider zone;
-    [Range(0.1f, 3f)] public float baseMoveSpeed = 0.8f; // 基礎速度
-    [Tooltip("整體速度倍率（想更慢就調低）")]
-    [Range(0.1f, 1f)] public float speedScale = 0.45f;
+    [Header("Zone")]
+    public BoxCollider zone;                 // 活動邊界（必填）
 
-    [Tooltip("每隔幾秒換一次目標點（大一點=更悠閒）")]
-    public float changeTargetEvery = 4.5f;
+    [Header("Move")]
+    [Tooltip("基礎水平速度(公尺/秒)")]
+    public float speed = 0.9f;
+    [Tooltip("sin 平滑的振幅(0~1 建議)")]
+    [Range(0f, 1f)] public float sinAmplitude = 0.35f;
+    [Tooltip("sin 頻率(越小越慵懶)")]
+    public float sinFrequency = 0.8f;
+    [Tooltip("每隔多少秒重新挑方向(區間)")]
+    public Vector2 retargetEvery = new Vector2(5f, 7f);
 
-    [Header("Wander (平滑飄移)")]
-    [Tooltip("Perlin 噪聲頻率，越低越平穩")]
-    public float wanderNoiseFreq = 0.35f;
-    [Tooltip("Perlin 噪聲對方向的影響強度")]
-    public float wanderNoiseStrength = 0.8f;
-    [Tooltip("最大轉向角速度（度/秒），越小越柔和")]
-    public float maxTurnDegPerSec = 90f;
-    [Tooltip("速度平滑係數（越大越貼目標，越小越慵懶）")]
-    public float velocityLerp = 4f;
+    [Header("Separation（避免靠太近）")]
+    [Tooltip("偵測半徑")]
+    public float separationRadius = 0.45f;
+    [Tooltip("推開力道")]
+    public float separationStrength = 1.6f;
+    [Tooltip("要避開的 Layer（沒有就 Everything）")]
+    public LayerMask avoidLayers = ~0;
 
-    [Header("Separation (避免重疊)")]
-    public float avoidRadius = 0.9f;
-    public float avoidStrength = 2.2f;
-    public LayerMask fairyLayer = 0;
+    [Header("Scale（開局自動縮到人 1/5）")]
+    [Tooltip("人的身高(用來估比例，僅輔助說明)")]
+    public float humanHeight = 1.7f;
+    [Tooltip("縮放倍率：人 1/5 = 0.2")]
+    public float scaleToHuman = 0.2f;
+    public float baseMoveSpeed = 0.8f;
 
-    [Header("Bob (上下漂浮)")]
-    public float bobAmplitude = 0.08f;
-    public float bobFrequency = 1.0f;
-
-    [Header("Model 外觀旋轉(子物件)")]
-    public Transform model;
-    public Vector2 spinYRange = new Vector2(-15f, 20f);     // ⚠️ 大幅降低
-    public Vector2 wobbleAmpRange = new Vector2(3f, 7f);    // 度
-    public Vector2 wobbleFreqRange = new Vector2(0.6f, 1.1f);
-
-    [Header("Stunt (偶爾小特技，超溫和)")]
-    public Vector2 stuntInterval = new Vector2(6f, 12f);    // 更少觸發
-    public Vector2 stuntDuration = new Vector2(1.2f, 2.0f);
-    [Range(3f, 18f)] public float bankMaxAngle = 12f;       // 小角度
-    public float bankSideDrift = 0.18f;                     // 輕微側滑
-    public int spinTurnsMin = 1;
-    public int spinTurnsMax = 1;                            // 只轉一圈，避免暈
-
-    enum StuntType { None, BankLeft, BankRight, Spin }
-
-    // ---- 内部狀態 ----
     Rigidbody rb;
-    Vector3 target;
-    Vector3 currentVel;             // 平滑速度
-    float bobPhase;
-
-    // 外觀
-    float spinY, wobbleAmp, wobbleFreq;
-    Vector3 wobbleAxis = Vector3.right;
-
-    // 特技
-    StuntType stunt = StuntType.None;
-    float stuntStart, stuntEnd;
-    int spinTurns = 1;
-
-    // Perlin 种子
-    float noiseSeedX, noiseSeedZ;
+    Vector3 dirXZ;                 // 目前水平方向
+    Vector3 smoothVel;             // 平滑速度
+    float baseY;                   // 固定飛行高度（用邊界的中間）
+    float nextRetargetTime;
+    float sinPhase;                // 隨機相位
+    Vector3 originalScale;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
+        rb.useGravity = false;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-        bobPhase   = Random.value * Mathf.PI * 2f;
-        noiseSeedX = Random.value * 100f;
-        noiseSeedZ = Random.value * 100f;
+        originalScale = transform.localScale;
+        transform.localScale = originalScale * scaleToHuman;   // 人 1/5
 
-        // 外觀參數（溫和版）
-        spinY      = Random.Range(spinYRange.x, spinYRange.y);
-        wobbleAmp  = Random.Range(wobbleAmpRange.x, wobbleAmpRange.y);
-        wobbleFreq = Random.Range(wobbleFreqRange.x, wobbleFreqRange.y);
-        wobbleAxis = Random.onUnitSphere; wobbleAxis.y = 0f;
-        if (wobbleAxis.sqrMagnitude < 1e-3f) wobbleAxis = Vector3.right;
-    }
+        sinPhase = Random.value * Mathf.PI * 2f;
+        if (zone != null)
+        {
+            var b = zone.bounds;
+            baseY = (b.min.y + b.max.y) * 0.5f;                // 固定在盒子中間高度
+            // 初始位置若超界，夾回盒內
+            Vector3 p = rb.position; p = ClampTo(b, p); p.y = baseY; rb.position = p;
+        }
 
-    void Start()
-    {
-        PickNewTarget();
-        InvokeRepeating(nameof(PickNewTarget), changeTargetEvery, changeTargetEvery);
-        ScheduleNextStunt();
+        PickNewDirection();
     }
 
     void FixedUpdate()
     {
-        if (!zone) return;
+        if (zone == null) return;
+
+        // 到時間就換方向
+        if (Time.time >= nextRetargetTime)
+            PickNewDirection();
 
         Vector3 pos = rb.position;
-        Bounds b = zone.bounds;
 
-        // 目標方向（水平）
-        Vector3 flatPos    = new Vector3(pos.x, 0f, pos.z);
-        Vector3 flatTarget = new Vector3(target.x, 0f, target.z);
-        Vector3 desiredDir = flatTarget - flatPos;
-        if (desiredDir.sqrMagnitude > 1e-4f) desiredDir.Normalize();
+        // ====== 1) sin 平滑速度 ======
+        float s = speed * (1f - sinAmplitude + sinAmplitude * (0.5f + 0.5f * Mathf.Sin(Time.time * sinFrequency + sinPhase)));
+        Vector3 desired = dirXZ * s;
 
-        // 平滑 wander：用 Perlin 讓方向慢慢偏
-        float t = Time.time;
-        float nx = Mathf.PerlinNoise(noiseSeedX, t * wanderNoiseFreq) * 2f - 1f;
-        float nz = Mathf.PerlinNoise(noiseSeedZ, t * wanderNoiseFreq) * 2f - 1f;
-        Vector3 noise = new Vector3(nx, 0f, nz).normalized * wanderNoiseStrength;
-
-        desiredDir = (desiredDir + noise);
-        if (desiredDir.sqrMagnitude > 1e-4f) desiredDir.Normalize();
-
-        // 分離力（溫和）
-        Vector3 avoid = Vector3.zero;
-        var hits = Physics.OverlapSphere(pos, avoidRadius, fairyLayer, QueryTriggerInteraction.Ignore);
-        foreach (var h in hits)
+        // ====== 2) 分離力（避開其他剛體）======
+        if (separationRadius > 0f)
         {
-            if (h.attachedRigidbody && h.attachedRigidbody != rb)
+            var hits = Physics.OverlapSphere(pos, separationRadius, avoidLayers, QueryTriggerInteraction.Ignore);
+            Vector3 push = Vector3.zero;
+            foreach (var h in hits)
             {
-                Vector3 away = (pos - h.attachedRigidbody.position);
-                float d = away.magnitude + 1e-4f;
-                avoid += away / (d * d);
+                if (!h || h.attachedRigidbody == rb) continue;
+                Vector3 away = (pos - h.transform.position); away.y = 0f;
+                float d = away.magnitude;
+                if (d < 1e-3f) continue;
+                // 距離越近推力越大（1/d 衰減）
+                push += away.normalized / d;
             }
-        }
-        avoid *= avoidStrength;
-
-        // 合成期望速度
-        Vector3 desiredVel = (desiredDir + avoid).normalized
-                             * (baseMoveSpeed * speedScale);
-
-        // 平滑到目標速度（不再每幀猛跳）
-        currentVel = Vector3.Lerp(currentVel, desiredVel, velocityLerp * Time.fixedDeltaTime);
-
-        // 特技（溫和）
-        float now = Time.time;
-        if (stunt == StuntType.None && now >= stuntStart)
-        {
-            stunt = (StuntType)Random.Range(0, 3);  // 0L、1R、2Spin
-            float dur = Random.Range(stuntDuration.x, stuntDuration.y);
-            stuntEnd = now + dur;
-            if (stunt == StuntType.Spin) spinTurns = Random.Range(spinTurnsMin, spinTurnsMax + 1);
+            desired += push * separationStrength;
         }
 
-        if ((stunt == StuntType.BankLeft || stunt == StuntType.BankRight) && currentVel.sqrMagnitude > 1e-4f)
+        // 只保留水平速度
+        desired.y = 0f;
+
+        // 平滑到期望速度（避免突然跳動）
+        smoothVel = Vector3.Lerp(smoothVel, desired, 6f * Time.fixedDeltaTime);
+
+        // 嘗試前進
+        Vector3 next = pos + smoothVel * Time.fixedDeltaTime;
+
+        // 邊界處理：超出就夾回、並把方向往中心修正
+        var bnds = zone.bounds;
+        if (!bnds.Contains(new Vector3(next.x, Mathf.Clamp(next.y, bnds.min.y, bnds.max.y), next.z)))
         {
-            Vector3 fwd = currentVel.normalized;
-            Vector3 right = Vector3.Cross(Vector3.up, fwd).normalized;
-            float dirSign = (stunt == StuntType.BankLeft) ? -1f : 1f;
-            currentVel += right * dirSign * bankSideDrift;
+            // 往中心微調方向，避免黏牆
+            Vector3 toCenter = (bnds.center - pos); toCenter.y = 0f;
+            if (toCenter.sqrMagnitude > 1e-4f)
+                dirXZ = Vector3.Lerp(dirXZ, toCenter.normalized, 0.5f);
+            next = ClampTo(bnds, next);
         }
-        if (stunt != StuntType.None && now >= stuntEnd) ScheduleNextStunt();
 
-        // 上下擺動
-        float baseY = Mathf.Lerp(b.min.y + 0.3f, b.max.y - 0.3f, 0.5f);
-        float bob = Mathf.Sin(Time.time * bobFrequency + bobPhase) * bobAmplitude;
+        // 固定高度
+        next.y = baseY;
 
-        // 邊界限制 + 移動
-        Vector3 next = pos + currentVel * Time.fixedDeltaTime;
-        next.y = baseY + bob;
-        next = ClampTo(b, next);
-
-        // 限制轉向角速度，避免瞬轉
-        if (currentVel.sqrMagnitude > 1e-4f)
+        // 轉向：面向水平速度
+        if (smoothVel.sqrMagnitude > 1e-4f)
         {
-            Quaternion to = Quaternion.LookRotation(currentVel.normalized);
-            rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, to, maxTurnDegPerSec * Time.fixedDeltaTime));
+            Quaternion want = Quaternion.LookRotation(new Vector3(smoothVel.x, 0f, smoothVel.z));
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, want, 6f * Time.fixedDeltaTime));
         }
 
         rb.MovePosition(next);
     }
 
-    void Update()
+    // === Helpers ===
+    void PickNewDirection()
     {
-        if (!model) return;
+        // 單純水平隨機向量
+        Vector3 v = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f));
+        dirXZ = (v.sqrMagnitude < 1e-4f) ? Vector3.forward : v.normalized;
 
-        // 自轉 + 擺動（溫和）
-        float spinAngle = spinY * Time.time;
-        Quaternion spinQ = Quaternion.Euler(0f, spinAngle, 0f);
-
-        float wobble = Mathf.Sin(Time.time * wobbleFreq) * wobbleAmp;
-        Quaternion wobbleQ = Quaternion.AngleAxis(wobble, wobbleAxis);
-
-        // 特技外觀
-        Quaternion stuntQ = Quaternion.identity;
-        if (stunt == StuntType.BankLeft || stunt == StuntType.BankRight)
-        {
-            float t = Mathf.Clamp01(Mathf.InverseLerp(stuntStart, stuntEnd, Time.time));
-            float ang = Mathf.Sin(t * Mathf.PI) * bankMaxAngle * (stunt == StuntType.BankLeft ? -1f : 1f);
-            stuntQ = Quaternion.AngleAxis(ang, Vector3.forward);
-        }
-        else if (stunt == StuntType.Spin)
-        {
-            float t = Mathf.Clamp01(Mathf.InverseLerp(stuntStart, stuntEnd, Time.time));
-            float ang = 360f * spinTurns * t;
-            stuntQ = Quaternion.AngleAxis(ang, Vector3.up);
-        }
-
-        model.localRotation = stuntQ * wobbleQ * spinQ;
-    }
-
-    // ---- Helpers ----
-    void PickNewTarget()
-    {
-        if (!zone) return;
-        var b = zone.bounds;
-        target = new Vector3(
-            Random.Range(b.min.x, b.max.x),
-            Random.Range(b.min.y, b.max.y),
-            Random.Range(b.min.z, b.max.z)
-        );
-    }
-
-    void ScheduleNextStunt()
-    {
-        float wait = Random.Range(stuntInterval.x, stuntInterval.y);
-        stuntStart = Time.time + wait;
-        stuntEnd = 0f;
-        stunt = StuntType.None;
+        nextRetargetTime = Time.time + Random.Range(retargetEvery.x, retargetEvery.y);
     }
 
     static Vector3 ClampTo(Bounds b, Vector3 p)
@@ -226,4 +143,7 @@ public class FairyWanderer : MonoBehaviour
         p.z = Mathf.Clamp(p.z, b.min.z, b.max.z);
         return p;
     }
+
+    // 讓舊程式若用到 moveSpeed 也能相容（可刪）
+    public float moveSpeed { get => speed; set => speed = value; }
 }

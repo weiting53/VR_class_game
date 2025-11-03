@@ -43,6 +43,6 @@ public class FairySpawner : MonoBehaviour
         if (fw == null) fw = go.AddComponent<FairyWanderer>();
         fw.zone = zone;
         fw.baseMoveSpeed = Random.Range(minSpeed, maxSpeed);
-        fw.fairyLayer = LayerMask.GetMask("Default"); // 或你的 Fairy 圖層
+        
     }
 }
