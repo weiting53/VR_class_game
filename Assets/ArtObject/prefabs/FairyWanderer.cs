@@ -61,6 +61,18 @@ public class FairyWanderer : MonoBehaviour
         next.x = Mathf.Clamp(next.x, b.min.x, b.max.x);
         next.y = Mathf.Clamp(next.y, b.min.y, b.max.y);
         next.z = Mathf.Clamp(next.z, b.min.z, b.max.z);
+        // 加入 S 曲線漂移
+        float curve = Mathf.Sin(Time.time * 0.7f + phase) * 0.8f;
+        Vector3 curveDir = new Vector3(curve, 0, curve);
+        velocity += curveDir;
+
+
+        // 面向移動方向
+        if (velocity.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(velocity.normalized);
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRot, 4f * Time.fixedDeltaTime));
+        }
 
         rb.MovePosition(next);
     }
