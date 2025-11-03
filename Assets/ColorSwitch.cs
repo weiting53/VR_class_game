@@ -20,8 +20,8 @@ public class ColorSwitch : MonoBehaviour
     void Update()
     {
         // 右手扳機：按下就發射
-        bool triggerDown = OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch);
-        if (triggerDown)
+        bool buttonDown = OVRInput.GetDown(OVRInput.Button.One);
+        if (buttonDown)
         {
             Debug.Log("Right down");
             if (quarterRingR.color == GameColor.Red)
@@ -32,17 +32,17 @@ public class ColorSwitch : MonoBehaviour
                 quarterRingR.SetColor(GameColor.Red);
         }
 
-        bool triggerDown2 = OVRInput.GetDown(OVRInput.Button.Three, OVRInput.Controller.LTouch);
-        if (triggerDown2)
-        {
-            Debug.Log("Left down");
-            if (quarterRingL.color == GameColor.Red)
-                quarterRingL.SetColor(GameColor.Green);
-            else if (quarterRingL.color == GameColor.Green)
-                quarterRingL.SetColor(GameColor.Blue);
-            else if (quarterRingL.color == GameColor.Blue)
-                quarterRingL.SetColor(GameColor.Red);
-        }
+        // bool triggerDown2 = OVRInput.GetDown(OVRInput.Button.Three, OVRInput.Controller.LTouch);
+        // if (triggerDown2)
+        // {
+        //     Debug.Log("Left down");
+        //     if (quarterRingL.color == GameColor.Red)
+        //         quarterRingL.SetColor(GameColor.Green);
+        //     else if (quarterRingL.color == GameColor.Green)
+        //         quarterRingL.SetColor(GameColor.Blue);
+        //     else if (quarterRingL.color == GameColor.Blue)
+        //         quarterRingL.SetColor(GameColor.Red);
+        // }
     }
 }
 

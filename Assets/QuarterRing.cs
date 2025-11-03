@@ -45,7 +45,7 @@ public static class GameColorExtensions
         return GameColor.White;
     }
 
-    public static Color ToColor(this GameColor gameColor)
+    public static Color ToColor(GameColor gameColor)
     {
         switch (gameColor)
         {
@@ -82,7 +82,18 @@ public class QuarterRing : MonoBehaviour
 
     public void SetColor(GameColor c)
     {
+        Debug.Log("Set color");
         color = c;
         renderer.material.color = GameColorExtensions.ToColor(color);
+    }
+
+    public void SwitchColor()
+    {
+        if (color == GameColor.Red)
+            SetColor(GameColor.Green);
+        else if (color == GameColor.Green)
+            SetColor(GameColor.Blue);
+        else if (color == GameColor.Blue)
+            SetColor(GameColor.Red);
     }
 }
