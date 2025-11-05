@@ -48,13 +48,49 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7146521406498821007, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7029948723529949830, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5334000131640321852, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4008579595499297552, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -804731622281664130, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 8b55b4b81a77b434e9ecf8068264b1dd, type: 2}
+    - target: {fileID: -352389591414561481, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
       propertyPath: m_Name
       value: spirit_green
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5148817236446094103, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5914173764048766335, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823154891176048494, guid: 32ef43d3546280d4d93de892207771e7, type: 3}
+      propertyPath: m_Layer
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -136,12 +172,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zone: {fileID: 0}
-  moveSpeed: 1.5
-  wanderStrength: 3
-  avoidStrength: 1.4
-  avoidRadius: 4
-  fairyLayer:
+  speed: 0.9
+  speedJitter: 0.25
+  speedNoiseFreq: 0.35
+  speedSmoothTime: 0.6
+  retargetEvery: {x: 5, y: 7}
+  maxTurnDegPerSec: 120
+  dirNoiseFreq: 0.25
+  dirNoiseStrength: 0.55
+  bobAmp1: 0.07
+  bobFreq1: 0.5
+  bobAmp2: 0.03
+  bobFreq2: 0.87
+  bobPerlinAmp: 0.015
+  bobSmoothTime: 0.25
+  separationRadius: 1
+  separationMaxAccel: 1.8
+  separationFalloff: 1.2
+  avoidLayers:
     serializedVersion: 2
-    m_Bits: 0
-  bobAmplitude: 0.12
-  bobFrequency: 1.6
+    m_Bits: 4294967295
+  wallProbeDist: 0.35
+  wallAvoidAccel: 2
+  maxAccel: 3
+  maxSpeed: 1.6
+  idleSpeedThreshold: 0.05
+  idleRotationAngle: 6
+  idleRotFreq1: 0.45
+  idleRotFreq2: 0.82
+  humanHeight: 1.7
+  scaleToHuman: 0.2
+  scaleMultiplier: 2.5
+  minSeparation: 0.28
+  separationSpring: 3.5

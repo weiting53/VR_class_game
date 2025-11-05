@@ -48,6 +48,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8116613859084990610, guid: cee63179f0d41b04291c6287094a2f41, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6733177361254619370, guid: cee63179f0d41b04291c6287094a2f41, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5531720581255164614, guid: cee63179f0d41b04291c6287094a2f41, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -2649882342574878106, guid: cee63179f0d41b04291c6287094a2f41, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -55,6 +67,18 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: cee63179f0d41b04291c6287094a2f41, type: 3}
       propertyPath: m_Name
       value: spirit_red
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cee63179f0d41b04291c6287094a2f41, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 984548307465402748, guid: cee63179f0d41b04291c6287094a2f41, type: 3}
+      propertyPath: m_Layer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815939541468019772, guid: cee63179f0d41b04291c6287094a2f41, type: 3}
+      propertyPath: m_Layer
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -136,12 +160,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zone: {fileID: 0}
-  moveSpeed: 1.6
-  wanderStrength: 3
-  avoidStrength: 1.4
-  avoidRadius: 3
-  fairyLayer:
+  speed: 0.9
+  speedJitter: 0.25
+  speedNoiseFreq: 0.35
+  speedSmoothTime: 0.6
+  retargetEvery: {x: 5, y: 7}
+  maxTurnDegPerSec: 120
+  dirNoiseFreq: 0.25
+  dirNoiseStrength: 0.55
+  bobAmp1: 0.07
+  bobFreq1: 0.5
+  bobAmp2: 0.03
+  bobFreq2: 0.87
+  bobPerlinAmp: 0.015
+  bobSmoothTime: 0.25
+  separationRadius: 1
+  separationMaxAccel: 1.8
+  separationFalloff: 1.2
+  avoidLayers:
     serializedVersion: 2
-    m_Bits: 0
-  bobAmplitude: 0.12
-  bobFrequency: 1.6
+    m_Bits: 4294967295
+  wallProbeDist: 0.35
+  wallAvoidAccel: 2
+  maxAccel: 3
+  maxSpeed: 1.6
+  idleSpeedThreshold: 0.05
+  idleRotationAngle: 6
+  idleRotFreq1: 0.45
+  idleRotFreq2: 0.82
+  humanHeight: 1.7
+  scaleToHuman: 0.2
+  scaleMultiplier: 2.5
+  minSeparation: 0.28
+  separationSpring: 3.5
