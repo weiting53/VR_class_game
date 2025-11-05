@@ -4,11 +4,14 @@ public class FairyController : MonoBehaviour
 {
     public ParticleSystem vanishEffect;
     public StarController star;
+    private bool isVanishing = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Ring"))
+        if (other.CompareTag("Ring") && !isVanishing)
         {
+            Debug.Log("touched");
+            isVanishing = true;
             StartCoroutine(Vanish());
         }
     }
@@ -18,7 +21,7 @@ public class FairyController : MonoBehaviour
         if (vanishEffect != null)
             vanishEffect.Play();
 
-        // ÁôÂÃºëÆF¥»Åé
+        // é—œé–‰æ¸²æŸ“è·Ÿç¢°æ’ž
         foreach (var r in GetComponentsInChildren<Renderer>())
             r.enabled = false;
 
