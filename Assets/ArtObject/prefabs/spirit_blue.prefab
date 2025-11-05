@@ -118,8 +118,8 @@ SphereCollider:
   m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.61818564
-  m_Center: {x: -7.244276, y: 0.1667453, z: -0.03532076}
+  m_Radius: 0.5228076
+  m_Center: {x: -7.3396535, y: 0.1667453, z: -0.03532076}
 --- !u!54 &4336223996727752833
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -160,8 +160,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zone: {fileID: 0}
-  speed: 0.9
-  speedJitter: 0.25
+  speed: 0.3
+  speedJitter: 0.121
   speedNoiseFreq: 0.35
   speedSmoothTime: 0.6
   retargetEvery: {x: 5, y: 7}
@@ -174,12 +174,14 @@ MonoBehaviour:
   bobFreq2: 0.87
   bobPerlinAmp: 0.015
   bobSmoothTime: 0.25
-  separationRadius: 1
+  separationRadius: 0.5
   separationMaxAccel: 1.8
   separationFalloff: 1.2
   avoidLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+  minSeparation: 0.28
+  separationSpring: 3.5
   wallProbeDist: 0.35
   wallAvoidAccel: 2
   maxAccel: 3
@@ -188,8 +190,6 @@ MonoBehaviour:
   idleRotationAngle: 6
   idleRotFreq1: 0.45
   idleRotFreq2: 0.82
-  humanHeight: 1.7
+  humanHeight: 1.6
   scaleToHuman: 0.2
   scaleMultiplier: 2.5
-  minSeparation: 0.28
-  separationSpring: 3.5

@@ -188,11 +188,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zone: {fileID: 0}
-  speed: 0.9
-  speedJitter: 0.25
+  speed: 0.3
+  speedJitter: 0.116
   speedNoiseFreq: 0.35
   speedSmoothTime: 0.6
-  retargetEvery: {x: 5, y: 7}
+  retargetEvery: {x: 5, y: 3}
   maxTurnDegPerSec: 120
   dirNoiseFreq: 0.25
   dirNoiseStrength: 0.55
@@ -202,22 +202,22 @@ MonoBehaviour:
   bobFreq2: 0.87
   bobPerlinAmp: 0.015
   bobSmoothTime: 0.25
-  separationRadius: 1
+  separationRadius: 0.6
   separationMaxAccel: 1.8
   separationFalloff: 1.2
   avoidLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+  minSeparation: 0.28
+  separationSpring: 3.5
   wallProbeDist: 0.35
   wallAvoidAccel: 2
   maxAccel: 3
   maxSpeed: 1.6
-  idleSpeedThreshold: 0.05
+  idleSpeedThreshold: 0.15
   idleRotationAngle: 6
   idleRotFreq1: 0.45
   idleRotFreq2: 0.82
-  humanHeight: 1.7
+  humanHeight: 1.6
   scaleToHuman: 0.2
   scaleMultiplier: 2.5
-  minSeparation: 0.28
-  separationSpring: 3.5

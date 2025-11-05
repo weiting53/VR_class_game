@@ -5,117 +5,88 @@ using UnityEngine;
 public class FairyWanderer : MonoBehaviour
 {
     [Header("Zone")]
-    public BoxCollider zone;                 // 活動邊界（必填）
+    public BoxCollider zone;
 
     [Header("Base Move")]
     [Tooltip("名義水平速度(公尺/秒)")]
     public float speed = 0.9f;
 
     [Header("Speed Modulation (知名遊戲常用作法)")]
-    [Tooltip("Perlin 噪聲的速度擾動比例：0.2 表示在 0.8x~1.2x 範圍內波動")]
     [Range(0f, 0.8f)] public float speedJitter = 0.25f;
-    [Tooltip("Perlin 變化頻率（越小越慵懶）")]
     public float speedNoiseFreq = 0.35f;
-    [Tooltip("速度目標的平滑時間（越大越慢變）")]
     public float speedSmoothTime = 0.6f;
 
     [Header("Heading / Wander（方向漫步）")]
-    [Tooltip("每隔幾秒換一次『目標方向』")]
     public Vector2 retargetEvery = new Vector2(5f, 7f);
-    [Tooltip("換方向的角速度上限（度/秒）")]
     public float maxTurnDegPerSec = 120f;
-    [Tooltip("隨機方向偏擾的噪聲頻率（越小越平穩）")]
     public float dirNoiseFreq = 0.25f;
-    [Tooltip("隨機方向偏擾強度（0~1）")]
     [Range(0f, 1f)] public float dirNoiseStrength = 0.55f;
 
     [Header("Vertical Bob（上下漂浮）")]
-    [Tooltip("主振幅（公尺）")]
-    public float bobAmp1 = 0.07f;
-    [Tooltip("主頻率（Hz）")]
-    public float bobFreq1 = 0.5f;
-    [Tooltip("次諧波振幅（公尺）")]
-    public float bobAmp2 = 0.03f;
-    [Tooltip("次諧波頻率（Hz）")]
-    public float bobFreq2 = 0.87f;
-    [Tooltip("Perlin 漂浮擾動（公尺）")]
+    public float bobAmp1 = 0.07f, bobFreq1 = 0.5f;
+    public float bobAmp2 = 0.03f, bobFreq2 = 0.87f;
     public float bobPerlinAmp = 0.015f;
-    [Tooltip("上下高度平滑時間")]
     public float bobSmoothTime = 0.25f;
 
-    [Header("Separation（避免靠太近）")]
-    [Tooltip("偵測半徑")]
+    [Header("Separation（避免靠太近；碰撞仍交給物理）")]
     public float separationRadius = 0.45f;
-    [Tooltip("分離最大推力（m/s²）")]
     public float separationMaxAccel = 1.8f;
-    [Tooltip("反平方衰減係數（越大越敏感）")]
     public float separationFalloff = 1.2f;
-    [Tooltip("要避開的 Layer（沒有就 Everything）")]
     public LayerMask avoidLayers = ~0;
+    [Tooltip("最小舒適距（小於此距離會強烈分離）")]
+    public float minSeparation = 0.28f;
+    [Tooltip("核心區的彈簧係數（越大越快推開）")]
+    public float separationSpring = 3.5f;
 
     [Header("Wall Avoid（牆面預判）")]
-    [Tooltip("預判距離（公尺），太小容易碰牆才轉向")]
     public float wallProbeDist = 0.35f;
-    [Tooltip("牆面轉向權重（m/s²）")]
     public float wallAvoidAccel = 2.0f;
 
     [Header("Dynamics 限制")]
     [Tooltip("最大水平加速度（m/s²）")]
-    public float maxAccel = 0f;
-    [Tooltip("最大水平速度（m/s），一般可=名義速度的 1.3~1.6 倍")]
+    public float maxAccel = 5f;                 // ← 給合理值（原本 0 會讓速度長不起來）
+    [Tooltip("最大水平速度（m/s）")]
     public float maxSpeed = 1.6f;
 
-    [Header("Scale（開局自動縮到人 1/5）")]
     [Header("Idle 微旋轉設定")]
-    [Tooltip("速度低於此值時視為 idle")]
     public float idleSpeedThreshold = 0.05f;
-
-    [Tooltip("idle 微旋轉最大角度 (度)")]
-    public float idleRotationAngle = 6f; // 建議 4~8 度
-
-    [Tooltip("主旋轉頻率 (Hz)")]
+    public float idleRotationAngle = 6f;
     public float idleRotFreq1 = 0.45f;
-
-    [Tooltip("副旋轉頻率 (Hz)")]
     public float idleRotFreq2 = 0.82f;
+    float idleRotSmoothVel, idleRotPhaseSeed;
 
-    float idleRotSmoothVel;    // internal smoothing
-    float idleRotPhaseSeed;    // random offset
-
+    [Header("Scale（開局自動縮到人 1/5）")]
     public float humanHeight = 1.7f;
     public float scaleToHuman = 0.2f;
     public float scaleMultiplier = 2.5f;
-    [Tooltip("最小舒適距（小於此距離會強烈分離）")]
-    public float minSeparation = 0.28f;   // 先試 0.26~0.32
-
-    [Tooltip("核心區的彈簧係數（越大越快推開）")]
-    public float separationSpring = 3.5f; // 先試 3~5
 
     // ==== 內部狀態 ====
     Rigidbody rb;
     Vector3 dirXZ;                       // 當前水平朝向（單位向量）
-    Vector3 velXZ;                       // 當前水平速度（m/s）
     float baseY;                         // 中線高度
     float nextRetargetTime;
     Vector3 desiredHeading;              // 目標朝向（平面）
     float speedTarget;                   // 目標速度（會隨 Perlin 起伏）
     float speedCurrent;                  // 平滑後當前速度
     float speedVelRef;                   // SmoothDamp 參考
-
     float bobVelRef;                     // 垂直高度平滑參考
-    float perlinSeedSpeed;
-    float perlinSeedDir;
-    float perlinSeedBob;
+    float perlinSeedSpeed, perlinSeedDir, perlinSeedBob;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
+
+        // ==== 重要：改用動態剛體（會彼此碰撞/推擠） ====
+        rb.isKinematic = false;                  // ← 讓物理解碰撞，彼此會互推
         rb.useGravity = false;
+        rb.mass = 0.2f;                          // 可依感覺調
+        rb.drag = 0.2f;                          // 微阻尼
+        rb.angularDrag = 0.2f;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
-#if UNITY_2021_2_OR_NEWER
-        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative; // kinematic 推薦
-#endif
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ; // 保持直立
+
+        // Fairy 的 Collider 請保持「非 Trigger」；要彼此碰撞，請確保 Layer 矩陣允許 Fairy↔Fairy 碰撞
 
         // 比例
         var originalScale = transform.localScale;
@@ -140,6 +111,7 @@ public class FairyWanderer : MonoBehaviour
         speedTarget = speed;
         speedCurrent = speed;
 
+        idleRotPhaseSeed = Random.value * 10f;    // 給 idle 旋轉相位
         ScheduleNextRetarget();
     }
 
@@ -149,155 +121,114 @@ public class FairyWanderer : MonoBehaviour
         float dt = Time.fixedDeltaTime;
         Vector3 pos = rb.position;
 
-        // === 1) 更新目標朝向（Wander + Perlin 偏擾），並限制轉向角速度 ===
+        // === 1) Wander 方向（限角速度） ===
         if (Time.time >= nextRetargetTime) ScheduleNextRetarget();
-        Vector3 noiseDir = Perlin2D(Time.time * dirNoiseFreq, perlinSeedDir);
-        noiseDir *= dirNoiseStrength;
+        Vector3 noiseDir = Perlin2D(Time.time * dirNoiseFreq, perlinSeedDir) * dirNoiseStrength;
         Vector3 wantedDir = (desiredHeading + noiseDir).normalized;
         dirXZ = TurnToward(dirXZ, wantedDir, maxTurnDegPerSec * Mathf.Deg2Rad * dt);
 
-        // === 2) 速度曲線：Perlin 速度因子 + 平滑 ===
+        // === 2) 速度曲線（Perlin 因子 + 平滑） ===
         float perlin = Mathf.PerlinNoise(Time.time * speedNoiseFreq, perlinSeedSpeed); // 0~1
-        float factor = Mathf.Lerp(1f - speedJitter, 1f + speedJitter, perlin);         // e.g. 0.75~1.25
-        speedTarget = Mathf.Clamp(speed * factor, 0.01f, maxSpeed*0.9f);
+        float factor = Mathf.Lerp(1f - speedJitter, 1f + speedJitter, perlin);
+        speedTarget = Mathf.Clamp(speed * factor, 0.01f, maxSpeed * 0.9f);
         speedCurrent = Mathf.SmoothDamp(speedCurrent, speedTarget, ref speedVelRef, speedSmoothTime);
 
-        // 想要的基礎水平速度
-        Vector3 desiredVel = dirXZ * speedCurrent;
+        // 目標水平速度
+        Vector3 desiredVelXZ = dirXZ * speedCurrent;
 
-        // === 3) 分離力（反平方 + 核心彈簧，最後再限幅） ===
+        // === 3) 軟分離力（禮貌讓位；真正推擠交給物理） ===
         if (separationRadius > 0f)
         {
-            var hits = Physics.OverlapSphere(pos, separationRadius, avoidLayers, QueryTriggerInteraction.Ignore);
-            Vector3 sep = Vector3.zero;
+            var hits = Physics.OverlapSphere(
+                pos, separationRadius, avoidLayers, QueryTriggerInteraction.Ignore // 彼此是非 Trigger，Ignore 即可
+            );
 
+            Vector3 sepAccel = Vector3.zero;
             foreach (var h in hits)
             {
                 if (!h || h.attachedRigidbody == rb) continue;
-
-                // 用 ClosestPoint 避免凸包/邊緣造成方向錯亂
                 Vector3 p = h.ClosestPoint(pos);
                 Vector3 away = pos - p; away.y = 0f;
                 float d = away.magnitude + 1e-4f;
                 Vector3 n = away / d;
 
-                // 反平方衰減（遠距柔和）
                 float invSq = separationFalloff / (d * d);
                 float repel = invSq;
 
-                // 軟式核心距（近距再加一層線性彈簧，避免真的貼合重疊）
                 if (d < minSeparation)
                 {
-                    float pen = (minSeparation - d) / Mathf.Max(minSeparation, 1e-4f); // 0~1
-                    repel += separationSpring * pen; // 疊加到加速度權重
+                    float pen = (minSeparation - d) / Mathf.Max(minSeparation, 1e-4f);
+                    repel += separationSpring * pen;
                 }
-
-                sep += n * repel;
+                sepAccel += n * repel;
             }
-
-            // 限制最大「等效加速度」
-            sep = ClampMagnitude(sep, separationMaxAccel);
-            desiredVel += sep * dt;
+            sepAccel = ClampMagnitude(sepAccel, separationMaxAccel);
+            desiredVelXZ += sepAccel * dt; // 轉成速度修正（讓位）
         }
 
-
-        // === 4) 牆面預判：往前射線，太近時往「切線方向」滑開 ===
-        Vector3 fwd = (velXZ.sqrMagnitude > 1e-6f ? velXZ.normalized : dirXZ);
+        // === 4) 牆面預判：沿牆滑行偏轉（速度修正） ===
+        Vector3 curVel = rb.velocity;
+        Vector3 fwd = (new Vector3(curVel.x, 0f, curVel.z).sqrMagnitude > 1e-6f ? new Vector3(curVel.x, 0f, curVel.z).normalized : dirXZ);
         if (Physics.Raycast(pos, fwd, out RaycastHit hit, wallProbeDist, avoidLayers, QueryTriggerInteraction.Ignore))
         {
-            // 切線方向（沿牆走），避免直撞
             Vector3 tangent = Vector3.Cross(Vector3.up, hit.normal).normalized;
-            Vector3 steer = tangent * wallAvoidAccel;
-            desiredVel += steer * dt;
+            desiredVelXZ += tangent * wallAvoidAccel * dt;
         }
 
-        // === 5) 限制最大水平加速度與速度，並平滑（SmoothDamp 比 Lerp 更穩） ===
-        Vector3 wantAccel = (desiredVel - velXZ) / Mathf.Max(dt, 1e-4f);
-        wantAccel = ClampMagnitude(wantAccel, maxAccel);
-        velXZ += wantAccel * dt;
-        velXZ = ClampMagnitude(velXZ, maxSpeed);
-        Vector3 next = pos + velXZ * dt;
+        // === 5) 用「加速度上限」把目前速度推向目標速度（交給物理解碰撞） ===
+        Vector2 curXZ = new Vector2(curVel.x, curVel.z);
+        Vector2 wantXZ = new Vector2(desiredVelXZ.x, desiredVelXZ.z);
+        Vector2 newXZ = Vector2.MoveTowards(curXZ, wantXZ, maxAccel * dt); // 加速度夾限
+        if (newXZ.magnitude > maxSpeed) newXZ = newXZ.normalized * maxSpeed;
 
-        // === 6) 邊界處理：盡量不硬夾牆，超出才反彈修正 ===
+        // === 6) 區域邊界（只“輕拉回”） ===
         var bnds = zone.bounds;
-        if (!bnds.Contains(new Vector3(next.x, Mathf.Clamp(next.y, bnds.min.y, bnds.max.y), next.z)))
+        if (!bnds.Contains(new Vector3(pos.x, Mathf.Clamp(pos.y, bnds.min.y, bnds.max.y), pos.z)))
         {
-            // 反彈到邊界面內，並把速度反向一點（像彈性小球但很軟）
-            Vector3 clamped = ClampTo(bnds, next);
-            Vector3 pushBack = (clamped - next);
-            velXZ += pushBack / Mathf.Max(dt, 1e-4f);
-            velXZ *= 0.8f; // 吸收一點能量，避免來回震盪
-            next = clamped;
-       }
-
-        // ====== A) 每幀最大位移上限，避免巨量跳動 ======
-        float maxStep = maxSpeed * 0.8f * dt;      // 一幀最多前進 1.5 倍最大速（你也可用 1.2~2.0 調）
-        Vector3 displacement = next - pos;
-        if (displacement.magnitude > maxStep)
-        {
-            next = pos + displacement.normalized * maxStep;
+            // 若跑出外面，輕拉回中心方向一點點（別硬 teleport，讓碰撞持續自然）
+            Vector3 center = bnds.center; center.y = pos.y;
+            Vector3 back = (center - pos);
+            Vector2 backXZ = new Vector2(back.x, back.z);
+            newXZ += Vector2.ClampMagnitude(backXZ, 1f) * 0.2f; // 小小拉回
         }
 
-        // ====== B) 邊界小幅回正（若已在你的程式較前面做完邊界處理，這段留作保險即可）======
-        if (!bnds.Contains(new Vector3(next.x, Mathf.Clamp(next.y, bnds.min.y, bnds.max.y), next.z)))
-        {
-            // 僅把超出的分量拉回一點點，而不是整個硬夾
-            Vector3 clamped = ClampTo(bnds, next);
-            Vector3 corr = clamped - next;
-            // 小幅回正＋吸能，避免彈弓效應
-            next += corr * 0.85f;
-            velXZ *= 0.85f;
-        }
-
-        // ====== C) 最終再保一次速度上限（避免下一幀爆衝）======
-        velXZ = ClampMagnitude(velXZ, maxSpeed);
-
-
-        // === 7) 垂直漂浮（多諧波 + Perlin），再平滑高度 ===
+        // === 7) 垂直漂浮：算出目標 y，再轉成 vy 指令 ===
         float t = Time.time;
-        float bob = bobAmp1 * Mathf.Sin(2f * Mathf.PI * bobFreq1 * t + 0.8f)    // 主諧波
-        + bobAmp2 * Mathf.Sin(2f * Mathf.PI * bobFreq2 * t + 2.1f)    // 次諧波
-        + (Mathf.PerlinNoise(t * 0.35f, perlinSeedBob) - 0.5f) * 2f * bobPerlinAmp;  // 少量 Perlin 打破規律
+        float bob =
+            bobAmp1 * Mathf.Sin(2f * Mathf.PI * bobFreq1 * t + 0.8f) +
+            bobAmp2 * Mathf.Sin(2f * Mathf.PI * bobFreq2 * t + 2.1f) +
+            (Mathf.PerlinNoise(t * 0.35f, perlinSeedBob) - 0.5f) * 2f * bobPerlinAmp;
 
-        float targetY = baseY + bob;
+        float targetY = Mathf.Clamp(baseY + bob, bnds.min.y + 0.02f, bnds.max.y - 0.02f);
         float newY = Mathf.SmoothDamp(pos.y, targetY, ref bobVelRef, bobSmoothTime);
-        next.y = Mathf.Clamp(newY, bnds.min.y + 0.02f, bnds.max.y - 0.02f);
+        float vy = (newY - pos.y) / Mathf.Max(dt, 1e-4f); // 把目標高度轉成速度
 
-        // === 8) 朝向：只看水平速度，避免上下抖動影響朝向 ===
-        Vector3 face = velXZ.sqrMagnitude > 1e-6f ? velXZ : dirXZ;
-        // 朝向處理
+        // === 8) 指派剛體速度（交給物理引擎處理互撞/去穿透） ===
+        rb.velocity = new Vector3(newXZ.x, vy, newXZ.y);
 
-        // idle 微旋轉：當速度很小時（基本停著看）才做
-        float mag = velXZ.magnitude;
+        // === 9) 朝向（看水平速度） + Idle 微旋轉 ===
+        Vector3 face = (new Vector3(rb.velocity.x, 0f, rb.velocity.z).sqrMagnitude > 1e-6f)
+                        ? new Vector3(rb.velocity.x, 0f, rb.velocity.z)
+                        : dirXZ;
+
+        float mag = new Vector3(rb.velocity.x, 0f, rb.velocity.z).magnitude;
         float idleAngle = 0f;
-
         if (mag < idleSpeedThreshold)
         {
             float t3 = Time.time + idleRotPhaseSeed;
-
-            // 多諧波：主 + 次 + 微Perlin → AAA常用 idle
             float wobble =
                 Mathf.Sin(2f * Mathf.PI * idleRotFreq1 * t3) * 0.7f +
                 Mathf.Sin(2f * Mathf.PI * idleRotFreq2 * t3 + 1.4f) * 0.3f +
                 (Mathf.PerlinNoise(t3 * 0.3f, idleRotPhaseSeed) - 0.5f) * 0.2f;
-
             float targetIdle = wobble * idleRotationAngle;
             idleAngle = Mathf.SmoothDamp(idleAngle, targetIdle, ref idleRotSmoothVel, 0.25f);
         }
-        else
-        {
-            idleRotSmoothVel = 0f;
-        }
+        else idleRotSmoothVel = 0f;
 
-        // 計算最終朝向
         Quaternion wantRot = Quaternion.LookRotation(new Vector3(face.x, 0f, face.z));
         Quaternion idleRot = Quaternion.Euler(0f, idleAngle, 0f);
         Quaternion finalRot = wantRot * idleRot;
-
-        rb.MoveRotation(Quaternion.Slerp(rb.rotation, finalRot, 6f * dt));
-
-
-        rb.MovePosition(next);
+        rb.MoveRotation(Quaternion.Slerp(rb.rotation, finalRot, 6f * dt)); // 旋轉可用 MoveRotation 保持平滑
     }
 
     // === Helpers ===
@@ -327,7 +258,6 @@ public class FairyWanderer : MonoBehaviour
         return (m > maxMag) ? (v * (maxMag / (m + 1e-6f))) : v;
     }
 
-    // 把 Perlin(0~1) 做成 2D 單位向量（平面）
     Vector3 Perlin2D(float t, float seed)
     {
         float a = Mathf.PerlinNoise(t, seed);
@@ -337,7 +267,6 @@ public class FairyWanderer : MonoBehaviour
         return new Vector3(v.normalized.x, 0f, v.normalized.y);
     }
 
-    // 以角速度限制轉向（避免瞬間折返造成閃動）
     Vector3 TurnToward(Vector3 currentDir, Vector3 targetDir, float maxRadPerStep)
     {
         currentDir.y = 0; targetDir.y = 0;
@@ -348,6 +277,6 @@ public class FairyWanderer : MonoBehaviour
         return Vector3.Slerp(currentDir, targetDir, t).normalized;
     }
 
-    // 還保留舊介面相容
+    // 舊介面相容
     public float moveSpeed { get => speed; set => speed = value; }
-}      
+}
