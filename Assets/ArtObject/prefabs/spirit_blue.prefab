@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 45815784affd7d24db5ebd4ac7133fec, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.76
+      value: 0.83
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 45815784affd7d24db5ebd4ac7133fec, type: 3}
       propertyPath: m_LocalPosition.y
@@ -118,7 +118,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
+  m_Radius: 0.8256216
+  m_Height: 1.8693273
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: -7.302148, y: 0.12558019, z: 0}
