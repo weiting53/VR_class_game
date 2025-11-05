@@ -50,7 +50,7 @@ public class RingFormer : MonoBehaviour
             ring.transform.rotation = Quaternion.LookRotation(leftHandRing.forward + rightHandRing.forward);
 
             GameColor c = GameColorExtensions.Add(leftHandRing.GetComponent<QuarterRing>().color, rightHandRing.GetComponent<QuarterRing>().color);
-            fr.SetColor(c);
+            // fr.SetColor(c);
             // ring.transform.position = leftHandRing.position + leftHandRing.up * ringRadius;
 
             if (
