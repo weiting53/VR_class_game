@@ -72,19 +72,55 @@ public static class GameColorExtensions
 public class QuarterRing : MonoBehaviour
 {
     public GameColor color;
-    private Renderer renderer;
+    public GameObject redQR;
+    public GameObject greenQR;
+    public GameObject blueQR;
+    public GameObject pureQR;
+
+    // private Renderer renderer;
 
     private void Start()
     {
-        renderer = GetComponent<Renderer>();
-        renderer.material.color = GameColorExtensions.ToColor(color);
+        // renderer = GetComponent<Renderer>();
+        // renderer.material.color = GameColorExtensions.ToColor(color);
+        TurnOffAllQRs();
+        redQR.SetActive(true);
     }
 
     public void SetColor(GameColor c)
     {
         Debug.Log("Set color");
         color = c;
-        renderer.material.color = GameColorExtensions.ToColor(color);
+
+        TurnOffAllQRs();
+
+        switch (color)
+        {
+            case GameColor.Red:
+                redQR.SetActive(true);
+                return;
+            case GameColor.Green:
+                greenQR.SetActive(true);
+                return;
+            case GameColor.Blue:
+                blueQR.SetActive(true);
+                return;
+            case GameColor.Pure:
+                pureQR.SetActive(true);
+                return;
+            default:
+                pureQR.SetActive(true);
+                return;
+        }
+        // renderer.material.color = GameColorExtensions.ToColor(color);
+    }
+
+    private void TurnOffAllQRs()
+    {
+        redQR.SetActive(false);
+        greenQR.SetActive(false);
+        blueQR.SetActive(false);
+        pureQR.SetActive(false);
     }
 
     public void SwitchColor()
