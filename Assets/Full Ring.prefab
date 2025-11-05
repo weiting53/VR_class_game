@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
+  rd: {fileID: 4013199180830368731}
 --- !u!1001 &7878707464596773342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -134,15 +135,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2434328821324725166, guid: 2f61a55ea02706c48b57f2c011135d54, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.33
+      value: 0.38
       objectReference: {fileID: 0}
     - target: {fileID: 2434328821324725166, guid: 2f61a55ea02706c48b57f2c011135d54, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.33
+      value: 0.38
       objectReference: {fileID: 0}
     - target: {fileID: 2434328821324725166, guid: 2f61a55ea02706c48b57f2c011135d54, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.33
+      value: 0.38
       objectReference: {fileID: 0}
     - target: {fileID: 2434328821324725166, guid: 2f61a55ea02706c48b57f2c011135d54, type: 3}
       propertyPath: m_LocalPosition.x
@@ -154,7 +155,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2434328821324725166, guid: 2f61a55ea02706c48b57f2c011135d54, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.125
+      value: 0.142
       objectReference: {fileID: 0}
     - target: {fileID: 2434328821324725166, guid: 2f61a55ea02706c48b57f2c011135d54, type: 3}
       propertyPath: m_LocalRotation.w
@@ -201,6 +202,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f61a55ea02706c48b57f2c011135d54, type: 3}
+--- !u!23 &4013199180830368731 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6550333746204785157, guid: 2f61a55ea02706c48b57f2c011135d54, type: 3}
+  m_PrefabInstance: {fileID: 7878707464596773342}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5521047660515844720 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2434328821324725166, guid: 2f61a55ea02706c48b57f2c011135d54, type: 3}

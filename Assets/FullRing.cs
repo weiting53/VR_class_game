@@ -5,17 +5,19 @@ using UnityEngine;
 public class FullRing : MonoBehaviour
 {
     public GameColor color;
-    private Renderer renderer;
+    public Renderer rd;
+
+    private Material mat;
     
     private void Start()
     {
-        renderer = GetComponent<Renderer>();
-        renderer.material.color = GameColorExtensions.ToColor(color);
+        mat = rd.material;
+        mat.SetColor("_Color", GameColorExtensions.ToColor(color));
     }
 
     public void SetColor(GameColor c)
     {
         color = c;
-        renderer.material.color = GameColorExtensions.ToColor(color);
+        mat.SetColor("_Color", GameColorExtensions.ToColor(color));
     }
 }
