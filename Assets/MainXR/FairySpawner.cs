@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections.Generic;
 
 public class FairySpawner : MonoBehaviour
 {
@@ -44,7 +42,7 @@ public class FairySpawner : MonoBehaviour
         var fw = go.GetComponent<FairyWanderer>();
         if (fw == null) fw = go.AddComponent<FairyWanderer>();
         fw.zone = zone;
-        fw.moveSpeed = Random.Range(minSpeed, maxSpeed);
-        fw.fairyLayer = LayerMask.GetMask("Default"); // 或你的 Fairy 圖層
+        fw.speed = Random.Range(minSpeed, maxSpeed);
+        
     }
 }
