@@ -3,7 +3,7 @@
     Properties
     {
 		[Header(Base)]
-        _MainColor ("Color", Color) = (1,1,1,0.2)
+        _MainColor ("Color", Color) = (1,1,1,1)
 		_Glossiness("Smoothness", Range(0,1)) = 1.0
 		_Metal("Metallic", Range(0,1)) = 1.0
 		
