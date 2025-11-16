@@ -30,7 +30,7 @@
         public float angleDeg = 12f;
 
         [Header("Speed / Spin")]
-        public Vector2 speedRange = new Vector2(6f, 10f);
+        public Vector2 speedRange = new Vector2(12f, 15f);
         public Vector2 randomAngularVelRangeDeg = new Vector2(0f, 360f);
 
         [Header("Weighted Prefabs")]
