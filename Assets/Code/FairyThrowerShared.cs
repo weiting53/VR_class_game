@@ -75,7 +75,9 @@
 
             var go = Instantiate(pf, pos, Quaternion.LookRotation(dir, Vector3.up));
             var rb = go.GetComponent<Rigidbody>() ?? go.AddComponent<Rigidbody>();
-            rb.useGravity = true;
+            rb.useGravity = false;
+            rb.drag = 0f; 
+            rb.angularVelocity = Vector3.zero;
             rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
             rb.interpolation = RigidbodyInterpolation.Interpolate;
             rb.velocity = dir * v;
