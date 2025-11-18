@@ -63,7 +63,7 @@
                 while (_accum >= 1f) { _accum -= 1f; ThrowOne(); }
             }
         }
-
+        
         public void ThrowOne()
         {
             var pf = PickPrefabByWeight();
@@ -73,7 +73,8 @@
             Vector3 dir = GetDirection(pos);
             float v = UnityEngine.Random.Range(speedRange.x, speedRange.y);
 
-            var go = Instantiate(pf, pos, Quaternion.LookRotation(dir, Vector3.up));
+            var go = Instantiate(pf, pos, Quaternion.identity);
+
             var rb = go.GetComponent<Rigidbody>() ?? go.AddComponent<Rigidbody>();
             rb.useGravity = false;
             rb.drag = 0f; 

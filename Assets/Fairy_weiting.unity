@@ -159,7 +159,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Size: {x: 0.5, y: 0.05, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &24738371
 Transform:
@@ -170,11 +170,10 @@ Transform:
   m_GameObject: {fileID: 24738369}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 20}
+  m_LocalPosition: {x: 0, y: 0.8, z: 15}
   m_LocalScale: {x: 2.225, y: 3.42375, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 232489437}
+  m_Children: []
   m_Father: {fileID: 258789564}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &46293914
@@ -329,13 +328,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 232489436}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.9914449, z: -0.13052616, w: 0}
-  m_LocalPosition: {x: 0, y: -0.14, z: -2.5}
-  m_LocalScale: {x: 0.44943824, y: 0.4521051, z: 0.4521052}
+  m_LocalRotation: {x: -0, y: 0.9961947, z: -0.08715578, w: 0}
+  m_LocalPosition: {x: 0, y: 0.32067502, z: 12.5}
+  m_LocalScale: {x: 1, y: 1.5148526, z: 0.48514742}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 24738371}
-  m_LocalEulerAnglesHint: {x: 15, y: 180, z: 0}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 10, y: 180, z: 0}
 --- !u!1 &258789563
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +379,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
+  m_BackGroundColor: {r: 0.100569494, g: 0.7106918, b: 0.6767737, a: 0.019607844}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -579,9 +578,9 @@ MonoBehaviour:
   spawnVolume: {fileID: 24738370}
   directionMode: 0
   forwardRef: {fileID: 232489437}
-  angleDeg: 13.5
-  speedRange: {x: 6, y: 10}
-  randomAngularVelRangeDeg: {x: 0, y: 360}
+  angleDeg: 0
+  speedRange: {x: 6, y: 9}
+  randomAngularVelRangeDeg: {x: -180, y: 360}
   weightedPrefabs:
   - prefab: {fileID: 3922821349826572773, guid: c457ab5c93a8b8047a8c8e5d82e96b1c, type: 3}
     weight: 1
@@ -596,7 +595,7 @@ MonoBehaviour:
   - prefab: {fileID: 178657619044104507, guid: 1ddaa235b5008b9428b42ec53cc96177, type: 3}
     weight: 1
   autoSpawn: 1
-  spawnsPerSecond: 1
+  spawnsPerSecond: 0.4
   drawGizmos: 1
   throwKey: 32
   randomSeed: -1
@@ -1097,3 +1096,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 802017934}
   - {fileID: 556327149}
+  - {fileID: 232489437}
