@@ -9,11 +9,11 @@ public class NetworkRingSqueezer : NetworkBehaviour
     public NetworkObject bubblePrefab;
 
     [Header("Squeeze Logic")]
-    [Tooltip("·í«e¤â¶Z <= ªì©l¤â¶Z ¡Ñ ³o­Ó¤ñ¨Ò ´Nµø¬°À½À£")]
+    [Tooltip("ï¿½ï¿½ï¿½eï¿½ï¿½Z <= ï¿½ï¿½lï¿½ï¿½Z ï¿½ï¿½ ï¿½oï¿½Ó¤ï¿½ï¿½ ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     [Range(0.2f, 0.99f)] public float squeezeDistanceRatio = 0.75f;
-    [Tooltip("±ø¥ó»Ý«ùÄò¦h¤[¤~Ä²µo(¬í)")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½Ý«ï¿½ï¿½ï¿½hï¿½[ï¿½~Ä²ï¿½o(ï¿½ï¿½)")]
     public float sustainTime = 0.15f;
-    [Tooltip("Ä²µo«á§N«o(¬í)")]
+    [Tooltip("Ä²ï¿½oï¿½ï¿½Nï¿½o(ï¿½ï¿½)")]
     public float cooldown = 1f;
 
     [Header("Bubble Launch")]
@@ -22,14 +22,14 @@ public class NetworkRingSqueezer : NetworkBehaviour
     [Header("Debug")]
     public bool debugLogs = true;
 
-    // ¦øªA¾¹ºÝ«O¦sªº¡u§ì¦í®É¤âªº¦ì¸m¡v
+    // ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ý«Oï¿½sï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½É¤âªºï¿½ï¿½mï¿½v
     Vector3 _handPosA, _handPosB;
     bool _hasA, _hasB;
-    float _lastA, _lastB;          // ¦^³ø®É¶¡ÂW¡AÁ×§KÂÂ¸ê®Æ
-    float _restHandDist = -1f;     // ¨â¤âªì©l¶ZÂ÷
+    float _lastA, _lastB;          // ï¿½^ï¿½ï¿½ï¿½É¶ï¿½ï¿½Wï¿½Aï¿½×§Kï¿½Â¸ï¿½ï¿½
+    float _restHandDist = -1f;     // ï¿½ï¿½ï¿½ï¿½lï¿½Zï¿½ï¿½
     float _sustain, _cd;
 
-    const float STALE = 0.25f;     // ¦h¤Ö¬í¤ºµø¬°¦³®Ä¦^³ø
+    const float STALE = 0.25f;     // ï¿½hï¿½Ö¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¦^ï¿½ï¿½
 
     void Update()
     {
@@ -44,7 +44,7 @@ public class NetworkRingSqueezer : NetworkBehaviour
 
         float cur = Vector3.Distance(_handPosA, _handPosB);
 
-        // ²Ä¤@¦¸Âù¤â¦P®É¦³®Ä ¡÷ ³]ªì©l¶ZÂ÷
+        // ï¿½Ä¤@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½É¦ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½]ï¿½ï¿½lï¿½Zï¿½ï¿½
         if (_restHandDist < 0f) _restHandDist = cur;
 
         float thr = _restHandDist * squeezeDistanceRatio;
@@ -79,10 +79,10 @@ public class NetworkRingSqueezer : NetworkBehaviour
         if (debugLogs) Debug.Log($"[Ring] SpawnBubble at {pos}");
     }
 
-    // === ¾ô±µ¦b§ì¦í/©ñ¶}®É©I¥s¡]·|±q Client ¨«¨ì Server¡^ ===
+    // === ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½/ï¿½ï¿½}ï¿½É©Iï¿½sï¿½]ï¿½|ï¿½q Client ï¿½ï¿½ï¿½ï¿½ Serverï¿½^ ===
     public void NotifyGrabbed(ulong clientId, Side side)
     {
-        // ¥u¼Ð°O¦³½Ö¦b§ì¡F¦ì¸m¥H UpdateHandPosServerRpc ¦^³ø¬°·Ç
+        // ï¿½uï¿½Ð°Oï¿½ï¿½ï¿½Ö¦bï¿½ï¿½Fï¿½ï¿½mï¿½H UpdateHandPosServerRpc ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (IsServer) SetHas(side, true);
         else SetHasServerRpc(side, true);
     }
@@ -105,7 +105,7 @@ public class NetworkRingSqueezer : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     void UpdateHandPosServerRpc(Side side, Vector3 worldPos) => UpdateHandPos(side, worldPos);
 
-    // ====== ¯u¥¿¼g¤J¡]¥u¦b Server °õ¦æ¡^ ======
+    // ====== ï¿½uï¿½ï¿½ï¿½gï¿½Jï¿½]ï¿½uï¿½b Server ï¿½ï¿½ï¿½ï¿½^ ======
     void SetHas(Side side, bool on)
     {
         if (side == Side.A) { _hasA = on; if (!on) _restHandDist = -1f; }

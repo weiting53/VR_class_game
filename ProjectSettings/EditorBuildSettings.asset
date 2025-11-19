@@ -8,9 +8,21 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/bubble.unity
-    guid: ecd33a00699845b42aca5ab20ae647b5
+    guid: 15508a5f1ce37834590f672d42d5c0b2
+  - enabled: 0
+    path: Assets/Scenes/MainXR.unity
+    guid: f70a3378c46cdd047bfccc8bc9483578
+  - enabled: 1
+    path: Assets/Scenes/RingTest.unity
+    guid: 98dcf4eabebf6474ba153bee8c49ac9c
+  - enabled: 0
+    path: Assets/Scenes/Test.unity
+    guid: c87bcc58af6a8af4fb47e911bf8da4e0
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: f8d8b474dd7e06042832be97e21ee169, type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 87793f3c0cd4eac4e93128157b7dfb3e, type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 09791b14e39f1e84dba187aa87ad7694, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 4c2917cd35cba9f48afef3da0cb6d364, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: da180cd862295814a9309f877a40b788, type: 2}
