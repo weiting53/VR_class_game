@@ -645,7 +645,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 556327149}
-  - component: {fileID: 556327148}
+  - component: {fileID: 556327151}
+  - component: {fileID: 556327150}
   m_Layer: 0
   m_Name: FairyThrower
   m_TagString: Untagged
@@ -653,46 +654,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &556327148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 556327147}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 623f69c5697292448aa2b91b101be238, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnOriginMode: 2
-  origin: {fileID: 0}
-  playerA: {fileID: 0}
-  playerB: {fileID: 0}
-  spawnVolume: {fileID: 24738370}
-  directionMode: 0
-  forwardRef: {fileID: 232489437}
-  angleDeg: 0
-  speedRange: {x: 6, y: 9}
-  randomAngularVelRangeDeg: {x: 5, y: 50}
-  weightedPrefabs:
-  - prefab: {fileID: 3922821349826572773, guid: c457ab5c93a8b8047a8c8e5d82e96b1c, type: 3}
-    weight: 1
-  - prefab: {fileID: 6728092312944040633, guid: 11a9149e6620c77419c6fb155c60f72a, type: 3}
-    weight: 1
-  - prefab: {fileID: 3660319412690773102, guid: 9ca0dbfc603d47f49873417aab9f60b5, type: 3}
-    weight: 1
-  - prefab: {fileID: 8042441834786420471, guid: f0f7d3988d794de47b230d1392e8fb63, type: 3}
-    weight: 1
-  - prefab: {fileID: 1567262978825430573, guid: 127065d811e6f1647a796efbb725cbf8, type: 3}
-    weight: 1
-  - prefab: {fileID: 178657619044104507, guid: 1ddaa235b5008b9428b42ec53cc96177, type: 3}
-    weight: 1
-  autoSpawn: 1
-  spawnsPerSecond: 0.4
-  drawGizmos: 1
-  throwKey: 32
-  randomSeed: -1
 --- !u!4 &556327149
 Transform:
   m_ObjectHideFlags: 0
@@ -708,6 +669,66 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &556327150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556327147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 2824370667
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &556327151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556327147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7cb4add39e779b4da32eadbc6a3dac0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnOriginMode: 2
+  origin: {fileID: 0}
+  playerA: {fileID: 0}
+  playerB: {fileID: 0}
+  spawnVolume: {fileID: 0}
+  directionMode: 3
+  forwardRef: {fileID: 0}
+  angleDeg: 12
+  speedRange: {x: 1.5, y: 3}
+  randomAngularVelRangeDeg: {x: 0, y: 360}
+  weightedPrefabs:
+  - prefab: {fileID: 0}
+    weight: 1
+  - prefab: {fileID: 0}
+    weight: 1
+  - prefab: {fileID: 0}
+    weight: 1
+  - prefab: {fileID: 0}
+    weight: 1
+  - prefab: {fileID: 0}
+    weight: 1
+  - prefab: {fileID: 0}
+    weight: 1
+  autoSpawn: 0
+  spawnsPerSecond: 0.5
+  drawGizmos: 1
+  throwKey: 32
 --- !u!1 &640793155
 GameObject:
   m_ObjectHideFlags: 0
@@ -1188,7 +1209,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 126285686}
   - {fileID: 802017934}
   - {fileID: 556327149}
   - {fileID: 232489437}
-  - {fileID: 126285686}
